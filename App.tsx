@@ -4,7 +4,11 @@ import { useState } from 'react';
 
 export default function App() {
     const [enteredGoalText, setEnteredGoalText] = useState('');
-    const [courseGoals, setCourseGoals] = useState<string[]>([]);
+    const [courseGoals, setCourseGoals] = useState<Goal[]>([]);
+    type Goal = {
+        id: string;
+        value: string;
+    };
 
     const goalInputHandler = (enteredText: string) => {
         setEnteredGoalText(enteredText);
@@ -15,7 +19,11 @@ export default function App() {
     };
 
     const addGoalHandler = () => {
-        setCourseGoals((currentGoals) => [...currentGoals, enteredGoalText]);
+        let newGoal: Goal = {
+            id: uniqueKey(),
+            value: enteredGoalText,
+        };
+        setCourseGoals((currentGoals) => [...currentGoals, newGoal]);
     };
     return (
         <View style={styles.appContainer}>
@@ -30,10 +38,10 @@ export default function App() {
             </View>
             <View style={styles.goalsContainer}>
                 <FlatList
-                    data={courseGoals}
+                    data={Object.values(courseGoals)}
                     renderItem={(itemData) => (
                         <View style={styles.goalItems}>
-                            <Text style={styles.goalText}>{itemData.item}</Text>
+                            <Text>{itemData.item.value}</Text>
                         </View>
                     )}
                 />
